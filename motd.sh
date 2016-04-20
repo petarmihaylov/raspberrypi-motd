@@ -97,7 +97,7 @@ greetings="$borderBar$(color $greetingsColor "$(center "Welcome back, $me!")")$b
 greetings="$greetings$borderBar$(color $greetingsColor "$(center "$(date +"%A, %d %B %Y, %T")")")$borderBar"
 
 # System information
-read loginFrom loginIP loginDate <<< $(last $me --time-format iso -2 | awk 'NR==2 { print $2,$3,$4 }')
+read loginFrom loginIP loginDate <<< $(last $me | awk 'NR==2 { print $2,$3,$4 }')
 
 # TTY login
 if [[ $loginDate == - ]]; then
@@ -108,8 +108,8 @@ fi
 if [[ $loginDate == *T* ]]; then
   login="$(date -d $loginDate +"%A, %d %B %Y, %T") ($loginIP)"
 else
-  # Not enough logins
-  login="None"
+  # Not enough logins OR the systax for last does not work on your Rasperry Pi, this will default to grabbing unformatted information
+  login="$(last $me | awk 'NR==2 { print $4,$5,$6,$7,"(",$3" )" }')"
 fi
 
 label1="$(extend "$login")"
